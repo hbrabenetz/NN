@@ -3,38 +3,13 @@
 
 void eins_durch_ehoch(double * p_val) {
 
-	// http://www3.cs.stonybrook.edu/~cse634/ch6NN.pdf
-	// output = 1 / (1+e^(-Înput)) another activation function
+	// output = 1 / (1+e^(-ÃŽnput))
 	// gibt 0 bis +1 
 
 	*p_val = 1.0 / (1 + pow(2.718, -1.0 * *p_val));
 
 	return; //  0.0; //  *d_val;
 }
-
-
-//double normalizationfunction1(double p_v_orig,
-//
-//	double A_max,//  6000.0;
-//	double A_min,// 500.0;
-//
-//	double new_A_max, // 1.0,
-//	double new_A_min) {// 0.0 // -1.0;
-//
-//	return (p_v_orig - A_min) * (new_A_max - new_A_min) / (A_max - A_min) + new_A_min; // v_norm; // 0.0;
-//}
-
-
-//double denormalizationfunction1(double p_v_norm,
-//
-//	double A_max, //  6000.0;
-//	double A_min, // 500.0;
-//
-//	double new_A_max, // 1.0,
-//	double new_A_min ) {// 0.0 // -1.0;
-//
-//	return (p_v_norm - new_A_min) * (A_max - A_min) / (new_A_max - new_A_min) + A_min;
-//}
 
 
 void N::norm(double& p_v_orig) { //, double& A_max, double& A_min, double& new_A_max, double& new_A_min) {
@@ -165,13 +140,16 @@ void N::calc() {
 
 		}
 
-	// hier könnte man die funktion verlassen falls man nicht lernen will zb
+	// hier kÃ¶nnte man die funktion verlassen falls man nicht lernen will zb
 	// durch einen boolschen parameter learn as true or false
 
 	//
 	// Backpropagation
 	//
 
+	// A good description of neural networks can be found here
+	// http://www3.cs.stonybrook.edu/~cse634/ch6NN.pdf
+	
 	//
 	// Backpropagation Algorithm
 	//
@@ -211,7 +189,7 @@ void N::calc() {
 			err[nlay][n] *= nod[nlay][n] * (1 - nod[nlay][n]);
 		}
 
-	// wij's und d's ändern, 
+	// wij's und d's Ã¤ndern, 
 	// wij = wij + learnRate * Errj * Oi
 	// Dj  = Dj  + learnRate * Errj * 1.0, -> Dij = Dij + learnRate * Errj * 1.0 
 	for (int nlay = 1; nlay < Nlay; ++nlay)
@@ -225,12 +203,12 @@ void N::calc() {
 
 		}
 
-	return; // 0; // denorm(nod[Nlay - 1][0]); // könnte auch tuple returnen usw
+	return; // 0; // denorm(nod[Nlay - 1][0]); // kÃ¶nnte auch tuple returnen usw
 }
 
 
 N::~N() {
 
-	// to be done
+	// to be done but not necessary in our specific use
 
 }
