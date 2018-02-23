@@ -12,16 +12,19 @@ void eins_durch_ehoch(double * p_val) {
 }
 
 
+// Normalization function
 void N::norm(double& p_v_orig) { //, double& A_max, double& A_min, double& new_A_max, double& new_A_min) {
 	p_v_orig = (p_v_orig - A_min) * (new_A_max - new_A_min) / (A_max - A_min) + new_A_min;
 }
 
 
+// Denormalization function
 double N::denorm(double& p_v_norm) { //, double& A_max, double& A_min, double& new_A_max, double& new_A_min) {
 	return (p_v_norm - new_A_min) * (A_max - A_min) / (new_A_max - new_A_min) + A_min;
 }
 
 
+// Constructor
 N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoosen act_method_received, std::tuple<double, double, double, double> normParam):
 	top{ topol }, LearnRate{ LearnRate }, act_method{ act_method_received }, normalizationParam{ normParam }
 {
@@ -60,6 +63,8 @@ N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoose
 		err[nlay] = new double[top[nlay]];
 	}
 
+	input = nod[0];
+
 	Nwij = 0;
 	wij = new double **[Nlay - 1];
 	for (int nlay = 0; nlay < Nlay - 1; ++nlay) // last layer needs no wij's
@@ -90,15 +95,17 @@ N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoose
 		nod[0][i] = 0.0;
 
 	/* Vektor for true Values */
-	tru = new double[top[Nlay - 1]];
+	trueVal = new double[top[Nlay - 1]];
 	for (int i = 0; i < top[Nlay - 1]; ++i) // lets initialize them just to avoid breakdowns
-		tru[i] = 0.0;
+		trueVal[i] = 0.0;
 
 	den = new double[top[Nlay - 1]];
 	for (int i = 0; i < top[Nlay - 1]; ++i)
 		den[i] = 0.0;
 
-	cout << "Neuronal Network is up and ready" << endl;
+	output = den;
+
+	cout << "Neural Network is up and ready" << endl;
 
 }
 
@@ -112,7 +119,7 @@ double* N::getCalcRes() {
 }
 
 
-void N::calc() {
+void N::calc(bool learn) {
 
 	//
 	// Forward calculation
@@ -143,12 +150,20 @@ void N::calc() {
 	// hier könnte man die funktion verlassen falls man nicht lernen will zb
 	// durch einen boolschen parameter learn as true or false
 
+	if(0)
+		getCalcRes(); // I could use it here to be safe and always produce a denormalized result
+
+	if (!learn) {
+		getCalcRes(); // we denormalize only when we do not learn for efficiency
+		return;
+	}
+
+	// A rather good description of neural networks can be found here
+	// http://www3.cs.stonybrook.edu/~cse634/ch6NN.pdf
+
 	//
 	// Backpropagation
 	//
-
-	// A good description of neural networks can be found here
-	// http://www3.cs.stonybrook.edu/~cse634/ch6NN.pdf
 	
 	//
 	// Backpropagation Algorithm
@@ -173,7 +188,7 @@ void N::calc() {
 	for (int n = 0; n < top[Nlay - 1]; ++n)
 		err[Nlay - 1][n] =  nod[Nlay - 1][n] *
 							(1 - nod[Nlay - 1][n]) *
-							(tru[n] - nod[Nlay - 1][n]);
+							(trueVal[n] - nod[Nlay - 1][n]);
 
 	// Hidden layer errors, Erri = Oi * (1 - Oi) * SUM Errk*wik 
 	for (int nlay = Nlay - 2; nlay > 0; --nlay)
