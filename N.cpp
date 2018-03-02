@@ -224,6 +224,26 @@ void N::calc(bool learn) {
 
 N::~N() {
 
-	// to be done but not necessary in our specific use
+	// done, but not necessary in our specific use. An empty destructor 
+	// or non excisting constructor would do as well.
+	for (int nlay = 0; nlay < Nlay; ++nlay) {
+		delete[] nod[nlay]; // = new double[top[nlay] + 1];
+		delete[] err[nlay];
+	}
+	delete[] nod;
+	delete[] err;
+
+	for (int nlay = 0; nlay < Nlay - 1; ++nlay)
+		for (int i = 0; i < top[nlay] + 1; ++i)
+			delete[] wij[nlay][i];
+
+	for (int nlay = 0; nlay < Nlay - 1; ++nlay) // last layer needs no wij's
+		delete[] wij[nlay]; // +1 is for D which is always 1.0
+
+	delete[] wij;
+	delete[] trueVal;
+	delete[] den;
+
+	cout << "regards from N's destructor" << endl;
 
 }
