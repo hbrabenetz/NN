@@ -24,7 +24,7 @@ using learn = bool;
 class N {
 public:
 
-	N(std::initializer_list<int>& t, double LearnRate = 0.9, activationMethodchoosen act_method_received = activationMethodchoosen::eins_durch_ehoch, std::tuple<double, double, double, double> nP = { 1.0, 0.0, 1.0, 0.0 });
+	N(std::initializer_list<int>& t, double LearnRate = 0.9, activationMethodchoosen act_method_received = activationMethodchoosen::eins_durch_ehoch, normalization nP = { 1.0, 0.0, 1.0, 0.0 });
 	double * input;
 	double * trueVal; 
 	void calc(bool learn);
@@ -34,7 +34,6 @@ private:
 	std::vector<int> top;
 	double LearnRate;
 	activationMethodchoosen act_method;
-	std::tuple<double, double, double, double> normalizationParam;
 
 	double A_max, A_min, new_A_max, new_A_min;
 	void   norm  (double& p_v_orig); // Normalization function

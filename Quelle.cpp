@@ -38,19 +38,19 @@ int main() {
 		n.input[0] = 0.0;
 		n.input[1] = 0.0;
 		n.calc(learn{ false });
-		cout << n.input[0] << n.input[1] << " -> " << n.output[0] << endl; // " " << (n.getCalcRes())[0] << endl;
+		cout << n.input[0] << n.input[1] << " -> " << n.output[0] << endl; 
 		n.input[0] = 0.0;
 		n.input[1] = 1.0;
 		n.calc(learn{ false });
-		cout << n.input[0] << n.input[1] << " -> " << n.output[0] << endl; // " " << (n.getCalcRes())[0] << endl;
+		cout << n.input[0] << n.input[1] << " -> " << n.output[0] << endl; 
 		n.input[0] = 1.0;
 		n.input[1] = 0.0;
 		n.calc(learn{ false });
-		cout << n.input[0] << n.input[1] << " -> "  << n.output[0] << endl; // " " << (n.getCalcRes())[0] << endl;
+		cout << n.input[0] << n.input[1] << " -> "  << n.output[0] << endl; 
 		n.input[0] = 1.0;
 		n.input[1] = 1.0;
 		n.calc(learn{ false });
-		cout << n.input[0] << n.input[1] << " -> " << n.output[0] << endl; // " " << (n.getCalcRes())[0] << endl;
+		cout << n.input[0] << n.input[1] << " -> " << n.output[0] << endl; ;
 	} // if (1) { // check if the network really learned to solve its task
 
 	std::cout << "Elapsed time in seconds = " << elapsed.count() / 1000000000.0 << std::endl;

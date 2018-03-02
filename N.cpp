@@ -25,14 +25,15 @@ double N::denorm(double& p_v_norm) { //, double& A_max, double& A_min, double& n
 
 
 // Constructor
-N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoosen act_method_received, std::tuple<double, double, double, double> normParam):
-	top{ topol }, LearnRate{ LearnRate }, act_method{ act_method_received }, normalizationParam{ normParam }
+N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoosen act_method_received, normalization normParam):
+	top{ topol }, LearnRate{ LearnRate }, act_method{ act_method_received }
 {
 
-	A_max = get<0>(normalizationParam);
-	A_min = get<1>(normalizationParam);
-	new_A_max = get<2>(normalizationParam);
-	new_A_min = get<3>(normalizationParam);
+	auto [amax, amin, namax, namin] = normParam;
+	A_max = amax;
+	A_min = amin;
+	new_A_max = namax;
+	new_A_min = namin;
 
 	if (act_method == activationMethodchoosen::eins_durch_ehoch)
 		p_activationfunction = eins_durch_ehoch;
