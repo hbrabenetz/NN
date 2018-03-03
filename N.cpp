@@ -1,5 +1,7 @@
 
+
 #include "N.h"
+
 
 void eins_durch_ehoch(double * p_val) {
 
@@ -11,6 +13,34 @@ void eins_durch_ehoch(double * p_val) {
 	return; //  0.0; //  *d_val;
 }
 
+
+double derivative_eins_durch_ehoch(double * p_val) {
+
+	// output is the irst derivative but calculated from y and not from x, 
+	// y = f(x) -> instead of y' = f'(x) here y' = f'(y) since we are moving backwards and what we have is y!
+
+	return *p_val * (1.0 - *p_val);
+}
+
+
+void ReLU(double * p_val) {
+
+	// output == input, unless input < 0 which gives output of zero
+	// gibt 0 bis +infinite
+
+	if (*p_val < 0.0)
+		*p_val = 0.0;
+
+	return ; //  0.0; //  *d_val;
+}
+
+
+double derivative_ReLU(double * p_val) {
+
+	if (*p_val <= 0.0)
+		return 0.0;
+	else return 1.0;
+}
 
 // Normalization function
 void N::norm(double& p_v_orig) { //, double& A_max, double& A_min, double& new_A_max, double& new_A_min) {
@@ -25,8 +55,8 @@ double N::denorm(double& p_v_norm) { //, double& A_max, double& A_min, double& n
 
 
 // Constructor
-N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoosen act_method_received, normalization normParam):
-	top{ topol }, LearnRate{ LearnRate }, act_method{ act_method_received }
+N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoosen act_method_received, normalization normParam, randomInit ranInit):
+	top{ topol }, LearnRate{ LearnRate }, act_method{ act_method_received}
 {
 
 	auto [amax, amin, namax, namin] = normParam;
@@ -35,17 +65,23 @@ N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoose
 	new_A_max = namax;
 	new_A_min = namin;
 
-	if (act_method == activationMethodchoosen::eins_durch_ehoch)
+	auto [initFrom, initTo] = ranInit;
+
+	if (act_method == activationMethodchoosen::eins_durch_ehoch) {
 		p_activationfunction = eins_durch_ehoch;
+		p_slope = derivative_eins_durch_ehoch;
+	}
+	else if (act_method == activationMethodchoosen::ReLU) {
+		p_activationfunction = ReLU;
+		p_slope = derivative_ReLU;
+	}
 
 	Nnod = 0;
 	using std::cout;
 	cout << "topologie ";
 	for (auto e : top) {
 		cout << e << " ";
-
 		Nnod += e;
-
 	}
 	cout << endl;
 
@@ -53,7 +89,7 @@ N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoose
 	cout << "Nlayer = " << Nlay << endl;
 
 	if (Nlay < 3) {
-		cout << "A neuronal network must have at least three layer including input and output layer. Programm will be terminated." << endl;
+		cout << "A neural network must have at least three layer including input and output layer. Programm will be terminated." << endl;
 		exit(0);
 	}
 
@@ -80,14 +116,14 @@ N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoose
 	cout << "Nnod = " << Nnod << endl;
 	cout << "Nwij = " << Nwij << endl;
 
-	auto random_d = std::bind(std::uniform_real_distribution<double>(-1.0, 1.0), std::default_random_engine{});
+	auto random_d = std::bind(std::uniform_real_distribution<double>(initFrom, initTo), std::default_random_engine{});
 
 	for (int nlay = 0; nlay < Nlay - 1; ++nlay)
 		for (int i = 0; i < top[nlay] + 1; ++i)
 			for (int j = 0; j < top[nlay + 1]; ++j)
 				wij[nlay][i][j] = random_d();
 
-	/** the fictive d nodes have to be set to 1.0 */
+	/** the fictive d nodes, which are a neat performance trick, have to be set to 1.0 */
 	for (int nlay = 0; nlay < Nlay; ++nlay)
 		nod[nlay][top[nlay]] = 1.0; // +1 is for D which is always 1.0
 
@@ -187,9 +223,8 @@ void N::calc(bool learn) {
 
 	// Output layer errors, Errk = Ok * (1 - Ok) * (Tk - Ok) ....Error for the Output Nodes 
 	for (int n = 0; n < top[Nlay - 1]; ++n)
-		err[Nlay - 1][n] =  nod[Nlay - 1][n] *
-							(1 - nod[Nlay - 1][n]) *
-							(trueVal[n] - nod[Nlay - 1][n]);
+		err[Nlay - 1][n] = (*p_slope)((double*)(&(nod[Nlay - 1][n]))) *
+						   (trueVal[n] - nod[Nlay - 1][n]);
 
 	// Hidden layer errors, Erri = Oi * (1 - Oi) * SUM Errk*wik 
 	for (int nlay = Nlay - 2; nlay > 0; --nlay)
@@ -202,7 +237,7 @@ void N::calc(bool learn) {
 				err[nlay + 1][nnext] *
 				wij[nlay][n][nnext];
 
-			err[nlay][n] *= nod[nlay][n] * (1 - nod[nlay][n]);
+			err[nlay][n] *= (*p_slope)((double*)(&(nod[nlay][n])));
 		}
 
 	// wij's und d's ändern, 
@@ -219,13 +254,14 @@ void N::calc(bool learn) {
 
 		}
 
-	return; // 0; // denorm(nod[Nlay - 1][0]); // könnte auch tuple returnen usw
+	return ; // 0; // denorm(nod[Nlay - 1][0]); // könnte auch tuple returnen usw
 }
 
 
 N::~N() {
 
-	// done, but not necessary in our specific use. An empty destructor 
+	// implemented here, but not really necessary in our specific use. 
+	// An empty destructor 
 	// or non excisting constructor would do as well.
 	for (int nlay = 0; nlay < Nlay; ++nlay) {
 		delete[] nod[nlay]; // = new double[top[nlay] + 1];

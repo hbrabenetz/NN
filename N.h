@@ -8,23 +8,31 @@
 #include <functional>
 #include <chrono>
 #include <tuple>
+#include <memory> // for unique_pointer
+#include <utility> // for std::move of unique pointer
 
 using namespace std;
 
 using topologie = std::initializer_list<int>;
 
-enum class activationMethodchoosen { tanh_sigmoid, eins_durch_ehoch, no_formula }; // Attention, it always needs an activation method, 
+enum class activationMethodchoosen { tanh_sigmoid, eins_durch_ehoch, ReLU, no_formula }; // Attention, it always needs an activation method, 
 
 inline void eins_durch_ehoch(double * p_val);
+inline double derivative_eins_durch_ehoch(double * p_val);
+
+inline void ReLU(double * p_val);
+inline double derivative_ReLU(double * p_val);
 
 using normalization = std::tuple<double, double, double, double>;
+using randomInit = std::tuple<double, double>;
+
 using learnRate = double;
 using learn = bool;
 
 class N {
 public:
 
-	N(std::initializer_list<int>& t, double LearnRate = 0.9, activationMethodchoosen act_method_received = activationMethodchoosen::eins_durch_ehoch, normalization nP = { 1.0, 0.0, 1.0, 0.0 });
+	N(std::initializer_list<int>& t, double LearnRate = 0.9, activationMethodchoosen act_method_received = activationMethodchoosen::eins_durch_ehoch, normalization nP = { 1.0, 0.0, 1.0, 0.0 }, randomInit in = { -1.0, 1.0 });
 	double * input;
 	double * trueVal; 
 	void calc(bool learn);
@@ -40,6 +48,7 @@ private:
 	double denorm(double& p_v_norm); // Denormalization function
 
 	void(*p_activationfunction)(double * val);
+	double(*p_slope)(double * val);
 
 	double ** nod;
 	double ** err;
