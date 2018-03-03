@@ -262,7 +262,7 @@ N::~N() {
 
 	// implemented here, but not really necessary in our specific use. 
 	// An empty destructor 
-	// or non excisting constructor would do as well.
+	// or non excisting destructor would do as well.
 	for (int nlay = 0; nlay < Nlay; ++nlay) {
 		delete[] nod[nlay]; // = new double[top[nlay] + 1];
 		delete[] err[nlay];
