@@ -32,7 +32,7 @@ using learn = bool;
 class N {
 public:
 
-	N(std::initializer_list<int>& t, double LearnRate = 0.9, activationMethodchoosen act_method_received = activationMethodchoosen::eins_durch_ehoch, normalization nP = { 1.0, 0.0, 1.0, 0.0 }, randomInit in = { -1.0, 1.0 });
+	N(const std::initializer_list<int>& t, double LearnRate = 0.9, activationMethodchoosen act_method_received = activationMethodchoosen::eins_durch_ehoch, normalization nP = { 1.0, 0.0, 1.0, 0.0 }, randomInit in = { -1.0, 1.0 });
 	double * input;
 	double * trueVal; 
 	void calc(bool learn);
