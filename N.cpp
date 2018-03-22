@@ -55,7 +55,7 @@ double N::denorm(double& p_v_norm) { //, double& A_max, double& A_min, double& n
 
 
 // Constructor
-N::N(std::initializer_list<int>& topol, double LearnRate, activationMethodchoosen act_method_received, normalization normParam, randomInit ranInit):
+N::N(const std::initializer_list<int>& topol, double LearnRate, activationMethodchoosen act_method_received, normalization normParam, randomInit ranInit):
 	top{ topol }, LearnRate{ LearnRate }, act_method{ act_method_received}
 {
 
