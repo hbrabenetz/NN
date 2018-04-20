@@ -4,8 +4,12 @@
 int main() {
 
 	// create the Network with a unique smart pointer
-	std::unique_ptr<N> p = std::make_unique<N>(topologie{ 2,3,1 }, learnRate{ 0.09 }, 
-						   activationMethodchoosen::ReLU, normalization{ 1.0, 0.0, 1.0, 0.0 }, randomInit{ 0.0, 1.0 }); 
+	std::unique_ptr<N> p = std::make_unique<N>(topologie{ 2,3,1 }, learnRate{ 0.9 }, 
+						   activationMethodchoosen::eins_durch_ehoch, normalization{ 1.0, 0.0, 1.0, 0.0 }, randomInit{ 0.0, 1.0 }); 
+
+	//std::unique_ptr<N> p = std::make_unique<N>(topologie{ 2,3,1 }, learnRate{ 0.09 },
+	//	activationMethodchoosen::ReLU, normalization{ 1.0, 0.0, 1.0, 0.0 }, randomInit{ 0.0, 1.0 });
+
 
 	std::chrono::high_resolution_clock::time_point timex;
 	std::chrono::nanoseconds elapsed;

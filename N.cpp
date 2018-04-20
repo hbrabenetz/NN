@@ -10,6 +10,8 @@ void eins_durch_ehoch(double * p_val) {
 
 	*p_val = 1.0 / (1 + pow(2.718, -1.0 * *p_val));
 
+
+
 	return; //  0.0; //  *d_val;
 }
 
@@ -41,6 +43,26 @@ double derivative_ReLU(double * p_val) {
 		return 0.0;
 	else return 1.0;
 }
+
+
+void tanhSigmoid(double * p_val) { // tanhSigmoid
+								   // output = tanh()
+								   // gibt -1 bis +1 
+
+	*p_val = tanh(*p_val);
+
+	return; //  0.0; //  *d_val;
+}
+
+double derivative_tanhSigmoid(double * p_val) {
+
+	// output is the first derivative but calculated from y and not from x, 
+	// y = f(x) -> instead of y' = f'(x) here y' = f'(y) since we are moving backwards and what we have is y!
+
+	return (1.0 - *p_val * *p_val);
+}
+
+
 
 // Normalization function
 void N::norm(double& p_v_orig) { //, double& A_max, double& A_min, double& new_A_max, double& new_A_min) {
@@ -75,6 +97,11 @@ N::N(const std::initializer_list<int>& topol, double LearnRate, activationMethod
 		p_activationfunction = ReLU;
 		p_slope = derivative_ReLU;
 	}
+	else if (act_method == activationMethodchoosen::tanh_sigmoid) {
+		p_activationfunction = tanhSigmoid;
+		p_slope = derivative_tanhSigmoid;
+	}
+
 
 	Nnod = 0;
 	using std::cout;
