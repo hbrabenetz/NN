@@ -22,6 +22,9 @@ inline double derivative_eins_durch_ehoch(double * p_val);
 
 inline void ReLU(double * p_val);
 inline double derivative_ReLU(double * p_val);
+	
+inline void tanhSigmoid(double * p_val);
+inline double derivative_tanhSigmoid(double * p_val);
 
 using normalization = std::tuple<double, double, double, double>;
 using randomInit = std::tuple<double, double>;
