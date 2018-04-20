@@ -5,7 +5,6 @@ especially in time critical scenarios.
 
 
 Einstellungen von Visual Studio 2017:
-Projekt->Eigenschaften->C/C++->Sprache->Konformitätsmodus->Nein setzen
 Projekt->Eigenschaften->C/C++->Sprache->C++-Sprachstandard->ISO C++17-Standard (/std:c++17) setzen
 
 
