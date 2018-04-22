@@ -1,5 +1,4 @@
 
-
 #include "N.h"
 
 
@@ -8,7 +7,7 @@ void eins_durch_ehoch(double * p_val) {
 	// output = 1 / (1+e^(-Înput))
 	// gibt 0 bis +1 
 
-	*p_val = 1.0 / (1 + pow(2.718, -1.0 * *p_val));
+	*p_val = 1.0 / (1 + pow(2.71828, -1.0 * *p_val));
 
 
 
