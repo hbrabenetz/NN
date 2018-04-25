@@ -90,6 +90,7 @@ N::N(const std::initializer_list<int>& topol, double LearnRate, activationMethod
 
 	if (act_method == activationMethodchoosen::eins_durch_ehoch) {
 		p_activationfunction = eins_durch_ehoch;
+
 		p_slope = derivative_eins_durch_ehoch;
 	}
 	else if (act_method == activationMethodchoosen::ReLU) {
@@ -126,6 +127,10 @@ N::N(const std::initializer_list<int>& topol, double LearnRate, activationMethod
 		err[nlay] = new double[top[nlay]];
 	}
 
+	
+	for (int i = 0; i < top[0]; ++i) // initializes the inputlayer with 0, just to be on the safe side
+		nod[0][i] = 0.0;
+	
 	input = nod[0];
 
 	Nwij = 0;
