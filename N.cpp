@@ -131,6 +131,8 @@ N::N(const std::initializer_list<int>& topol, double LearnRate, activationMethod
 	for (int i = 0; i < top[0]; ++i) // initializes the inputlayer with 0, just to be on the safe side
 		nod[0][i] = 0.0;
 	
+	input = nod[0];
+	
 	NInput = top[0];
 	NOutput = top[Nlay-1];
 
