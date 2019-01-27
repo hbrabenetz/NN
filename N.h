@@ -56,7 +56,7 @@ private:
 	double ** nod;
 	double ** err;
 	double *** wij;
-	double * den; // denormalized result of calc, only returned on demand
+	//double * den; // denormalized result of calc, only returned on demand
 	int Nlay;
 	int Nnod;
 	int Nwij;
