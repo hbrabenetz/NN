@@ -17,7 +17,7 @@ void eins_durch_ehoch(double * p_val) {
 
 double derivative_eins_durch_ehoch(double * p_val) {
 
-	// output is the irst derivative but calculated from y and not from x, 
+	// output is the first derivative but calculated from y and not from x, 
 	// y = f(x) -> instead of y' = f'(x) here y' = f'(y) since we are moving backwards and what we have is y!
 
 	return *p_val * (1.0 - *p_val);
